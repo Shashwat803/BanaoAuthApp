@@ -57,7 +57,7 @@ router.post('/forgotPassword', async (req, res) => {
         if (emailExist) {
             const generateOtp = Math.floor(1000 + Math.random() * 9000).toString();
             await sendEmail(email, "Password Reset", `Your OTP is: ${generateOtp}`).then(() => {
-                res.status(200).send("Email Send")
+                res.status(200).send(`Otp Sent on ${email}`)
             })
             await UserRegister.findOneAndUpdate(
                 { otp: generateOtp },
