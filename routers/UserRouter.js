@@ -3,7 +3,7 @@ const { UserRegister } = require('../models/UserModel')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const sendEmail = require('../utils/Email.Js')
+const sendEmail = require('../utils/Email.js')
 
 
 
