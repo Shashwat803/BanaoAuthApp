@@ -2,7 +2,7 @@ const { Post, Comment } = require('../models/PostModel')
 
 
 // same for like as comment
-// comment should come first 
+// crd for comment & like
 
 
 const addPost = async (req, res, next) => {
@@ -23,8 +23,8 @@ const addPost = async (req, res, next) => {
 const getPosts = async (req, res, next) => {
     try {
         const user = req.user
-        console.log(user)
-        const posts = await Post.find({ userId: user.id }).populate('comments')
+        const posts = await Post.find({ userId: user.id })
+            .populate({ path: 'comments', select: 'text user', options: { sort: { createdAt: -1 } } })
         res.status(200).json(posts)
     } catch (error) {
         next(error)
@@ -50,13 +50,13 @@ const addComment = async (req, res, next) => {
 
         const comment = new Comment({
             postId: id,
-            user: user.id,
+            user: user.username,
             text
         })
-        await comment.save()
+        const savedComment = await comment.save()
         const updatedPost = await Post.findByIdAndUpdate(
             id,
-            { $push: { comments: comment } },
+            { $push: { comments: savedComment._id } },
             { new: true }
         )
         res.status(201).json(updatedPost);
