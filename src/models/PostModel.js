@@ -5,7 +5,7 @@ const commentSchema = mongoose.Schema({
     user: { type: String, required: true },
     text: { type: String, required: true },
 },
-    { timestamp: true });
+    { timestamp: true });    
 
 const Post = mongoose.Schema({
     userId: { type: String, required: true },
