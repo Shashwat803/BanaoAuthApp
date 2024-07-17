@@ -1,13 +1,15 @@
 const express = require('express')
 const validateUser = require('../middleware/ValidateToken')
-const { createPost, getPosts, createComment, updatePost, likePost, deleteComment, deletePost, deleteLikes } = require('../controllers/PostController')
+const { createPost, getPostsOfUser, createComment, updatePost, likePost, deleteComment, deletePost, deleteLikes, getAllPosts } = require('../controllers/PostController')
 
 const router = express.Router()
 
 // Route for create post
 router.post('/post', validateUser, createPost)
-// Route for get post
-router.get('/post', validateUser, getPosts)
+// Route for get all post of user
+router.get('/post', validateUser, getPostsOfUser)
+// Route for get all post
+router.get('/post/all', validateUser, getAllPosts)
 // Route for update post
 router.put('/post/:id', validateUser, updatePost)
 // Route for create comment

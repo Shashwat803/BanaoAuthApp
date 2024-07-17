@@ -63,7 +63,7 @@ const userLogin = async (req, res, next) => {
                 username: user.username,
                 email: user.email
             }
-        }, process.env.JWTSCERET, { expiresIn: '1h' });
+        }, process.env.JWTSCERET, { expiresIn: '8h' });
 
         // Send token and success message
         res.status(200).json({ token, message: "Logged in successfully" });

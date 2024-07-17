@@ -17,12 +17,27 @@ const createPost = async (req, res, next) => {
     }
 }
 
-// Get all posts for a user
-const getPosts = async (req, res, next) => {
+// Get all posts of a user
+const getPostsOfUser = async (req, res, next) => {
     try {
         const user = req.user
-        // Find all posts for the user and populate comments
+        // Find all posts of the user and populate comments
         const posts = await Post.find({ userId: user.id })
+            .populate({
+                path: 'comments',
+                select: 'text user',
+                options: { sort: { createdAt: -1 } }
+            })
+        res.status(200).json(posts)
+    } catch (error) {
+        next(error)
+    }
+}
+
+// Get all posts 
+const getAllPosts = async (req, res, next) => {
+    try {
+        const posts = await Post.find()
             .populate({
                 path: 'comments',
                 select: 'text user',
@@ -61,12 +76,12 @@ const createComment = async (req, res, next) => {
         })
         const savedComment = await comment.save()
         // Add comment to the post
-        const updatedPost = await Post.findByIdAndUpdate(
+         await Post.findByIdAndUpdate(
             id,
             { $push: { comments: savedComment._id } },
             { new: true }
         )
-        res.status(201).json(updatedPost);
+        res.status(201).json({ comment: savedComment });
     } catch (error) {
         next(error)
     }
@@ -146,7 +161,8 @@ const deleteLikes = async (req, res, next) => {
 
 module.exports = {
     createPost,
-    getPosts,
+    getPostsOfUser,
+    getAllPosts,
     updatePost,
     createComment,
     likePost,
